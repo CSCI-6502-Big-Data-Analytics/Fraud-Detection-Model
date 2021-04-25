@@ -66,8 +66,8 @@ if __name__=='__main__':
         "V26": "1.15543923721475",
         "V27": "-0.0211993299630798",
         "V28": "0.0625654360473211",
-        "Amount": 142.71,
-        "label": 0
+        "Amount": 142.71
+        # "Class": 0
         }
     ]
     predictions = predict(testSamples, pipelineModel)
