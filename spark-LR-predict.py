@@ -2,13 +2,6 @@
 # 
 # 
 import os, sys
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# from sklearn.model_selection import train_test_split
-# from sklearn.linear_model import LogisticRegression
-# import numpy as np
-
 from pyspark.sql import SparkSession, Row
 from pyspark.ml import PipelineModel
 from pyspark.ml.classification import LogisticRegressionModel
@@ -20,22 +13,23 @@ spark = SparkSession.builder.appName('fraud-detection').master("local[*]").getOr
 LR_MODEL_SAVEPATH = 'saves/LRBalancedModel'
 PIPELINE_SAVEPATH = 'saves/pipelineModelBalanced'
 
-def predict(testSamples, pipelineModel):
+def predict(testSamples, pipelineModel, lrModel):
     testDf = spark.createDataFrame([Row(**i) for i in testSamples])
     for col in testDf.columns:
         testDf = testDf.withColumn(col, testDf[col].cast(FloatType()))
-    all_input_cols = testDf.columns[:-1]
+        
+    all_input_cols = testDf.columns
     testDf = pipelineModel.transform(testDf)
     selectedCols = ['features'] + all_input_cols 
 
-    testDf = testDf.select(selectedCols)    
-    lrModel = LogisticRegressionModel.load(LR_MODEL_SAVEPATH)    
+    testDf = testDf.select(selectedCols)
     outputDf = lrModel.transform(testDf)
     predictions = outputDf.select(f.collect_list('prediction')).first()[0]
     return predictions
 
 
 if __name__=='__main__':
+    lrModel = LogisticRegressionModel.load(LR_MODEL_SAVEPATH)
     pipelineModel = PipelineModel.load(PIPELINE_SAVEPATH)
     testSamples = [
         {        
@@ -72,5 +66,5 @@ if __name__=='__main__':
         # "Class": 0
         }
     ]
-    predictions = predict(testSamples, pipelineModel)
+    predictions = predict(testSamples, pipelineModel, lrModel)
     print(predictions)
