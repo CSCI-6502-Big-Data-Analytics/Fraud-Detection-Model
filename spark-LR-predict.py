@@ -24,7 +24,7 @@ def predict(testSamples, pipelineModel):
     testDf = spark.createDataFrame([Row(**i) for i in testSamples])
     for col in testDf.columns:
         testDf = testDf.withColumn(col, testDf[col].cast(FloatType()))
-    all_input_cols = testDf.columns[1:-1]
+    all_input_cols = testDf.columns[:-1]
     testDf = pipelineModel.transform(testDf)
     selectedCols = ['features'] + all_input_cols 
 
@@ -38,8 +38,7 @@ def predict(testSamples, pipelineModel):
 if __name__=='__main__':
     pipelineModel = PipelineModel.load(PIPELINE_SAVEPATH)
     testSamples = [
-        {
-        "_c0": 650,
+        {        
         "Time": 99,
         "V1": "-0.8839956497728281",
         "V2": "-0.150764822957996",

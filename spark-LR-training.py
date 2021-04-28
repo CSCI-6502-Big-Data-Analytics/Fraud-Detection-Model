@@ -39,7 +39,7 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.ml import Pipeline
 
 stages = []
-all_input_cols = all_columns[1:-1]
+all_input_cols = all_columns[:-1]
 print(all_input_cols)
 assembler = VectorAssembler(inputCols=all_input_cols, outputCol="features")
 stages += [assembler]
