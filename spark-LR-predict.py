@@ -1,10 +1,13 @@
+# PySpark 2.4.6
+# 
+# 
 import os, sys
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-import numpy as np
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LogisticRegression
+# import numpy as np
 
 from pyspark.sql import SparkSession, Row
 from pyspark.ml import PipelineModel
